@@ -59,13 +59,15 @@ model Outfit {
 }
 
 model OutfitItem {
-  @@id([outfitId, itemId])
+  id BigInt @id @default(autoincrement())
 
   outfitId BigInt
   outfit Outfit @relation(fields: [outfitId], references: [id], onDelete: Cascade)
 
-  itemId BigInt
-  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  closetItemId BigInt
+  closetItem ClosetItem @relation(fields: [closetItemId], references: [id], onDelete: Cascade)
+  
+  @@unique([outfitId, closetItemId]) // prevents duplicates
 }
 
 model Review {
@@ -111,7 +113,6 @@ model Item {
   
   itemBrand ItemBrand[]
   image Image[]
-  outfitItem OutfitItem[]
   closetItem ClosetItem[]
 }
 
@@ -144,11 +145,15 @@ model Closet {
 }
 
 model ClosetItem {
-  @@id([itemId, closetId])  
+  id BigInt @id @default(autoincrement())
 
   itemId BigInt
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   closetId BigInt
   closet Closet @relation(fields: [closetId], references: [id], onDelete: Cascade)
+  
+  @@unique([itemId, closetId])  
+
+  outfitItem OutfitItem[]
 }
