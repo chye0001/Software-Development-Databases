@@ -52,7 +52,7 @@ model Outfit {
   style String
   dateAdded DateTime @default(now())
 
-  createdBy String
+  createdBy String @db.Uuid
   user User @relation(fields: [createdBy], references: [id])
 
   outfitItems OutfitItem[]
@@ -73,7 +73,7 @@ model Review {
   score Int
   text String
 
-  writtenBy String
+  writtenBy String @db.Uuid
   user User @relation(fields: [writtenBy], references: [id])
 }
 
@@ -137,7 +137,7 @@ model Closet {
   isPublic Boolean @default(false)
   createdAt DateTime @default(now())
 
-  userId String
+  userId String @db.Uuid
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   closetItem ClosetItem[]
