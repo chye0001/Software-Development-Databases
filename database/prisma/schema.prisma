@@ -13,8 +13,142 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(uuid(7)) @db.Uuid
   email     String   @unique
-  name      String?
+  firstName String
+  lastName  String
   createdAt DateTime @default(now())
+  
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+  
+  countryId Int
+  country   Country  @relation(fields: [countryId], references: [id])
+
+  review Review[]
+  outfit Outfit[]
+  closet Closet[]
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  role  String @unique
+
+  users User[]
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+  name String
+  countryCode String
+
+  users User[]
+  brands Brand[]
+}
+
+model Outfit {
+  id BigInt @id @default(autoincrement())
+  name String
+  style String
+  dateAdded DateTime @default(now())
+
+  createdBy String
+  user User @relation(fields: [createdBy], references: [id])
+
+  outfitItems OutfitItem[]
+}
+
+model OutfitItem {
+  @@id([outfitId, itemId])
+
+  outfitId BigInt
+  outfit Outfit @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+
+  itemId BigInt
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id BigInt @id @default(autoincrement())
+  score Int
+  text String
+
+  writtenBy String
+  user User @relation(fields: [writtenBy], references: [id])
+}
+
+
+
+model Brand {
+  id Int @id @default(autoincrement())
+  name String
+
+  countryId Int
+  country Country @relation(fields: [countryId], references: [id])
+
+  itemBrand ItemBrand[]
+}
+
+// Brands can collaborate, meaning multiple brands can create a piece of clothing/accesaries/shoes etc.
+model ItemBrand {
+  @@id([itemId, brandId]) // Composite key prevents duplicates
+
+  itemId BigInt
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  brandId Int 
+  brand Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+}
+
+// Items are implicitly clothing items, such as suches, wrist watches etc.
+model Item {
+  id BigInt @id @default(autoincrement())
+  name String
+  price Decimal?
+
+  categoryId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  
+  itemBrand ItemBrand[]
+  image Image[]
+  outfitItem OutfitItem[]
+  closetItem ClosetItem[]
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+
+  item Item[]
+}
+
+model Image {
+  id BigInt @id @default(autoincrement())
+  url String
+
+  itemId BigInt
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Closet {
+  id BigInt @id @default(autoincrement())
+  name String
+  description String?
+  isPublic Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  closetItem ClosetItem[]
+}
+
+model ClosetItem {
+  @@id([itemId, closetId])  
+
+  itemId BigInt
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  closetId BigInt
+  closet Closet @relation(fields: [closetId], references: [id], onDelete: Cascade)
 }
