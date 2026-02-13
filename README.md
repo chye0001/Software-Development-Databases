@@ -20,6 +20,9 @@ To start up the local database, run the following command:
 docker-compose up -d
 ```
 
+To understand how to work with the local database using Prisma see the [README.md](./database/README.md) located in the /database folder. 
+
+
 # Starting up backend
 Run the following command to start up the local backend:
 ```bash
