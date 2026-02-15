@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: backend
+    image: fjeldberg/database:latest
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
+    depends_on:
+      - database
+    restart: unless-stopped
