@@ -89,4 +89,4 @@ jobs:
           script: |
             cd /home/${{ secrets.DEPLOY_USER }}/database/backend
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            docker compose up -d
+            docker compose -f docker-compose.app.yml up -d
