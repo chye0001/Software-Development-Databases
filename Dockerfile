@@ -43,4 +43,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/healthcheck', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
 # Start application with tsx loader
-CMD ["node", "--loader", "tsx", "app.ts"]
+CMD ["node", "--import", "tsx", "app.ts"]
