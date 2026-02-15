@@ -67,7 +67,8 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: docker-compose.app.yml
-          target: /database/backend/docker-compose.yml
+          target: /database/backend
+
       - name: Copy .env file to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -75,7 +76,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: .env
-          target: /database/backend/.env
+          target: /database/backend
 
       - name: Deploy to self-hosted server
         uses: appleboy/ssh-action@master
