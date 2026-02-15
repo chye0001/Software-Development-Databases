@@ -64,7 +64,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            cd /path/to/app
+            cd /database/backend
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             docker-compose down
             docker-compose up -d
