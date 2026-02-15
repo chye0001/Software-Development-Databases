@@ -70,13 +70,15 @@ jobs:
           target: /home/${{ secrets.DEPLOY_USER }}/database/backend
 
       - name: Copy .env file to server
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: .env
-          target: /home/${{ secrets.DEPLOY_USER }}/database/backend
+          script: |
+            cat << 'EOF' > /home/${{ secrets.DEPLOY_USER }}/database/backend/.env
+            ${{ secrets.ENV }}
+            EOF
 
       - name: Deploy to self-hosted server
         uses: appleboy/ssh-action@master
