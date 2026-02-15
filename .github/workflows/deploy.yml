@@ -67,7 +67,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: docker-compose.app.yml
-          target: /database/backend
+          target: /home/${{ secrets.DEPLOY_USER }}/database/backend
 
       - name: Copy .env file to server
         uses: appleboy/scp-action@v0.1.7
@@ -76,7 +76,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: .env
-          target: /database/backend
+          target: /home/${{ secrets.DEPLOY_USER }}/database/backend
 
       - name: Deploy to self-hosted server
         uses: appleboy/ssh-action@master
@@ -85,6 +85,6 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            cd /database/backend
+            cd /home/${{ secrets.DEPLOY_USER }}/database/backend
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             docker compose up -d
