@@ -16,9 +16,6 @@ COPY . .
 # Use a dummy DATABASE_URL since we only need to generate types, not connect
 RUN DATABASE_URL="postgresql://user:password@localhost:5432/dummy" npx prisma generate
 
-# Build TypeScript
-RUN npm run build
-
 # Production stage
 FROM node:20-alpine
 
@@ -31,7 +28,6 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 # Copy built application from builder
-COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/database ./database
 
@@ -46,5 +42,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/healthcheck', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
-# Start application
-CMD ["node", "app.ts"]
+# Start application with tsx loader
+CMD ["node", "--loader", "tsx", "app.ts"]
