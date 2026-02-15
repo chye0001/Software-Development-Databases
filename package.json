@@ -25,7 +25,8 @@
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "express": "^5.2.1",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
@@ -34,7 +35,6 @@
     "dotenv": "^17.2.3",
     "dotenv-cli": "^11.0.0",
     "prisma": "^7.3.0",
-    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
