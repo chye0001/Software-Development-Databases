@@ -12,11 +12,11 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Generate Prisma Client first (needed for TypeScript compilation)
+RUN npx prisma generate
+
 # Build TypeScript
 RUN npm run build
-
-# Generate Prisma Client
-RUN npx prisma generate
 
 # Production stage
 FROM node:20-alpine
