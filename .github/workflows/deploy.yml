@@ -57,22 +57,25 @@ jobs:
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Copy docker-compose.yml to server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            scp ./docker-compose.app.yml ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/database/backend/docker-compose.yml
+          source: docker-compose.app.yml
+          target: /database/backend/docker-compose.yml
       - name: Copy .env file to server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            scp ./.env ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/database/backend/.env
+          source: .env
+          target: /database/backend/.env
 
       - name: Deploy to self-hosted server
         uses: appleboy/ssh-action@master
@@ -83,5 +86,4 @@ jobs:
           script: |
             cd /database/backend
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            docker-compose down
-            docker-compose up -d
+            docker compose up -d
