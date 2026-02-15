@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/database-assignment
+  IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/database
 
 jobs:
   build-and-push:

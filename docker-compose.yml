@@ -10,6 +10,22 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - database_volume:/var/lib/postgresql/data
+  
+  app:
+    container_name: backend
+    image: ${{ secrets.DOCKER_HUB_USERNAME }}/database:latest
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+    depends_on:
+      - database
+    restart: unless-stopped
 
 volumes:
   database_volume:
