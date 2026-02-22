@@ -24,8 +24,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install production dependencies only
-RUN npm ci --omit=dev
+# Install all dependencies (needed for migrations)
+RUN npm ci
 
 # Copy built application from builder
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma

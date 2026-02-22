@@ -90,3 +90,9 @@ jobs:
             cd /home/${{ secrets.DEPLOY_USER }}/database/backend
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             docker compose -f docker-compose.app.yml up -d
+
+            # Wait for container to be healthy
+            sleep 10
+
+            # Run migrations
+            docker exec backend npx prisma migrate deploy
