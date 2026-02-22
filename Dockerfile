@@ -34,6 +34,7 @@ COPY --from=builder /app/database ./database
 # Copy source for runtime (if needed)
 COPY app.ts ./
 COPY tsconfig.json ./
+COPY prisma.config.ts ./
 
 # Expose port
 EXPOSE 3000

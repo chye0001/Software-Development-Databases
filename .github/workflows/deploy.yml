@@ -94,5 +94,8 @@ jobs:
             # Wait for container to be healthy
             sleep 10
 
+            # Generate Prisma client
+            docker exec backend npx prisma generate
+
             # Run migrations
             docker exec backend npx prisma migrate deploy
