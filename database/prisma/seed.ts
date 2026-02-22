@@ -295,7 +295,6 @@ async function seed() {
         }
     });
 
-    console.log("✅ Database seeded successfully!");
     console.log({
         users: { bob, alice },
         countries: { usa, denmark },
@@ -306,6 +305,7 @@ async function seed() {
         closets: { bobCloset, aliceCloset },
         outfits: { casualOutfit, premiumOutfit }
     });
+    console.log("✅ Database seeded successfully!");
 }
 
 seed()
