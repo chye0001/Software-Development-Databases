@@ -12,12 +12,14 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
 DB_VOLUME=database_volume
+
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
 ```
 
 
 To start up the local database, run the following command:
 ```bash
-docker-compose up -d
+docker compose -f docker-compose.db.yml up -d
 ```
 
 To understand how to work with the local database using Prisma see the [README.md](./database/README.md) located in the /database folder. 

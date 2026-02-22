@@ -3,25 +3,25 @@ Starting up the local database instance simply navigate to the root of the proje
 Then execute the folllowing command: 
 
 ```bash
-docker compose up
+docker compose -f docker-compose.db.yml up -d
 ```
 This will start up a local instance of a Postgress database, using a default volume named: "default_volume". 
 You can change and initilise different volumes using the following command:
 
 ```bash
-DB_VOLUME="name_of_your_choise" docker compose up
+DB_VOLUME="name_of_your_choice" docker compose -f docker-compose.db.yml up -d
 ```
 
 or simply set the value of DB_VOLUME in the [.env](.env) file and run:
 ```bash
-docker compose up
+docker compose -f docker-compose.db.yml up -d
 ```
 
 
 # Working with Prisma
 
 ## Initial Prisma setup after clonning repository
-After pulling the code base, you need to sync you local database. You do this by calling the following command:
+After pulling the code base, you need to sync your local database. You do this by calling the following command:
 
 ```bash
 npm run prisma:push
@@ -63,11 +63,11 @@ npm run prisma:migrate
 This will generate a migration file and place it in the [/migrations](./prisma/migrations/) folder and apply them directly to the database you are connected to. Afterwards it will automatically generate a database client and sync it with the changes to [schema.prisma](./prisma/schema.prisma) - the database has to be running for it to apply the changes, otherwise it will only create the migrations file.
 
 
-## Connect to the Postgre Database
-There a multiple ways to connect to the Postgre database, but the simplest is to do:
+## Connect to the Postgres Database
+There are multiple ways to connect to the Postgres database, but the simplest is to do:
 ```bash
 npm run prisma:studio
 ```
 
-Otherwise you can connect using DataGript or Dbeaver - just a Database Client that supports Postgre.
+Otherwise you can connect using DataGrip or DBeaver - just a Database Client that supports Postgres.
 The credentials can be found in the [.env](../.env) file located at the root of the project.
