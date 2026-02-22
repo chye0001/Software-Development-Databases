@@ -7,3 +7,10 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    networks:
+      - database_network
+
+networks:
+  database_network:
+    name: database_network
+  

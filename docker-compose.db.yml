@@ -10,7 +10,13 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - database_volume:/var/lib/postgresql/data
-  
+    networks:
+      - database_network
+
 volumes:
   database_volume:
     name: ${DB_VOLUME}
+
+networks:
+  database_network:
+    name: database_network
