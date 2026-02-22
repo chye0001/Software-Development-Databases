@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -79,8 +73,6 @@ model Review {
   user User @relation(fields: [writtenBy], references: [id])
 }
 
-
-
 model Brand {
   id Int @id @default(autoincrement())
   name String
@@ -91,7 +83,7 @@ model Brand {
   itemBrand ItemBrand[]
 }
 
-// Brands can collaborate, meaning multiple brands can create a piece of clothing/accesaries/shoes etc.
+// Brands can collaborate, meaning multiple brands can create a piece of clothing/accesories/shoes etc.
 model ItemBrand {
   @@id([itemId, brandId]) // Composite key prevents duplicates
 
@@ -102,7 +94,7 @@ model ItemBrand {
   brand Brand @relation(fields: [brandId], references: [id], onDelete: Cascade)
 }
 
-// Items are implicitly clothing items, such as suches, wrist watches etc.
+// Items are implicitly clothing items, such as shoes, tops, bottoms etc.
 model Item {
   id BigInt @id @default(autoincrement())
   name String
