@@ -7,12 +7,16 @@
     "dev": "tsx watch app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "prisma:push": "prisma db push",
     "prisma:seed": "prisma db seed",
-    "prisma:reset": "prisma migrate reset"
+    "prisma:reset": "prisma migrate reset",
+
+    "mongo:seed": "tsx database/mongo/scripts/seed.ts",
+    "mongo:reset": "tsx database/mongo/scripts/reset.ts"
   },
   "prisma": {
     "schema": "./database/postgres/prisma/schema.prisma"
@@ -24,14 +28,16 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
-    "express": "^5.2.1",
-    "pg": "^8.18.0",
-    "tsx": "^4.21.0",
     "dotenv": "^17.2.3",
-    "dotenv-cli": "^11.0.0"
+    "dotenv-cli": "^11.0.0",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.3",
+    "pg": "^8.18.0",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^25.2.2",
     "@types/pg": "^8.16.0",
     "prisma": "^7.3.0",
