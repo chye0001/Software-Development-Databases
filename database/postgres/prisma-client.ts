@@ -4,11 +4,11 @@ import pg from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Get DATABASE_URL from environment
-const databaseUrl = process.env.DATABASE_URL;
+// Get POSTGRES_DATABASE_URL from environment
+const databaseUrl = process.env.POSTGRES_DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL environment variable is required");
+  throw new Error("POSTGRES_DATABASE_URL environment variable is required");
 }
 
 // Create PostgreSQL connection pool

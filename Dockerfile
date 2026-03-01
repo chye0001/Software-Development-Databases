@@ -13,8 +13,8 @@ RUN npm ci
 COPY . .
 
 # Generate Prisma Client first (needed for TypeScript compilation)
-# Use a dummy DATABASE_URL since we only need to generate types, not connect
-RUN DATABASE_URL="postgresql://user:password@localhost:5432/dummy" npx prisma generate
+# Use a dummy POSTGRES_DATABASE_URL since we only need to generate types, not connect
+RUN POSTGRES_DATABASE_URL="postgresql://user:password@localhost:5432/dummy" npx prisma generate
 
 # Production stage
 FROM node:20-alpine

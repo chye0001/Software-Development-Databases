@@ -15,7 +15,7 @@
     "prisma:reset": "prisma migrate reset"
   },
   "prisma": {
-    "schema": "./database/prisma/schema.prisma"
+    "schema": "./database/postgres/prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",

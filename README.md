@@ -13,7 +13,7 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
 DB_VOLUME=database_volume
 
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
+POSTGRES_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
 ```
 
 

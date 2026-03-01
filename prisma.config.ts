@@ -3,17 +3,17 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
-const databaseUrl = process.env.DATABASE_URL//["DATABASE_URL"];
+const databaseUrl = process.env.POSTGRES_DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL environment variable is required. Set it in your .env file located at /database/.env");
+  throw new Error("POSTGRES_DATABASE_URL environment variable is required. Set it in your .env file located at /database/postgres/.env");
 }
 
 export default defineConfig({
-  schema: "./database/prisma/schema.prisma",
+  schema: "./database/postgres/prisma/schema.prisma",
   migrations: {
-    path: "./database/prisma/migrations",
-    seed: "tsx ./database/prisma/seed.ts"
+    path: "./database/postgres/prisma/migrations",
+    seed: "tsx ./database/postgres/prisma/seed.ts"
   },
   datasource: {
     url: databaseUrl,
