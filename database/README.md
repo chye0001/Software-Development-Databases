@@ -1,11 +1,11 @@
-# Start up local database
-Starting up the local database instance simply navigate to the root of the project in the terminal.
+# Start up local databases
+Starting up the local database instances simply navigate to the root of the project in the terminal.
 Then execute the folllowing command: 
 
 ```bash
 docker compose -f docker-compose.db.yml up -d
 ```
-This will start up a local instance of a Postgress database, using a default volume named: "default_volume". 
+This will start up a local instance of a Postgress & Mongo database, using a default volume named: "default_volume". 
 You can change and initilise different volumes using the following command:
 
 ```bash
@@ -71,3 +71,31 @@ npm run prisma:studio
 
 Otherwise you can connect using DataGrip or DBeaver - just a Database Client that supports Postgres.
 The credentials can be found in the [.env](../.env) file located at the root of the project.
+
+
+
+
+
+
+# Working with Mongoose
+Mongoose unlike Prisma does not have build in commands that can be run against the database instance like...
+"seeding", "reseting", "migrating" etc...
+
+Therefore inside the [scripts](./mongo/scripts/) folder, manual scripts has been written and will be
+executed via package.json scripts to enable the some of the same features.
+
+## Seeding the Database
+To seed the monogo database simply run the following command:
+TODO maybe seed on first container build?
+```bash
+npm run mongo:seed
+```
+
+## Reseting the Database
+To reset the database wiping out all the data call the command:
+```bash
+npm run mongo:reset
+```
+This will basically drop the entire Mongo database. This is expected behavior, since Mongo does not
+show any collections are databases, if there are no Collections with any Documents inside.
+In other words if there are no data stored in the database, Mongo will not show the database.
