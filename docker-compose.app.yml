@@ -3,7 +3,7 @@ services:
     container_name: backend
     image: ${DOCKER_HUB_USERNAME}/database:latest
     ports:
-      - "3000:3000"
+      - "3000:3001"
     env_file:
       - .env
     restart: unless-stopped
