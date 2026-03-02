@@ -8,6 +8,7 @@ datasource db {
 }
 
 model User {
+  @@map("users")
   id        String      @id @default(uuid(7)) @db.Uuid
   email     String   @unique
   firstName String
@@ -26,6 +27,7 @@ model User {
 }
 
 model Role {
+  @@map("roles")
   id    Int    @id @default(autoincrement())
   role  String @unique
 
@@ -33,6 +35,7 @@ model Role {
 }
 
 model Country {
+  @@map("countries")
   id Int @id @default(autoincrement())
   name String
   countryCode String
@@ -42,6 +45,7 @@ model Country {
 }
 
 model Outfit {
+  @@map("outfits")
   id BigInt @id @default(autoincrement())
   name String
   style String
@@ -54,6 +58,7 @@ model Outfit {
 }
 
 model OutfitItem {
+  @@map("outfit_items")
   id BigInt @id @default(autoincrement())
 
   outfitId BigInt
@@ -66,6 +71,7 @@ model OutfitItem {
 }
 
 model Review {
+  @@map("reviews")
   id BigInt @id @default(autoincrement())
   score Int
   text String
@@ -75,6 +81,7 @@ model Review {
 }
 
 model Brand {
+  @@map("brands")
   id Int @id @default(autoincrement())
   name String
 
@@ -86,6 +93,7 @@ model Brand {
 
 // Brands can collaborate, meaning multiple brands can create a piece of clothing/accesories/shoes etc.
 model ItemBrand {
+  @@map("item_brands")
   @@id([itemId, brandId]) // Composite key prevents duplicates
 
   itemId BigInt
@@ -97,6 +105,7 @@ model ItemBrand {
 
 // Items are implicitly clothing items, such as shoes, tops, bottoms etc.
 model Item {
+  @@map("items")
   id BigInt @id @default(autoincrement())
   name String
   price Decimal?
@@ -110,6 +119,7 @@ model Item {
 }
 
 model Category {
+  @@map("categories")
   id Int @id @default(autoincrement())
   name String
 
@@ -117,6 +127,7 @@ model Category {
 }
 
 model Image {
+  @@map("images")
   id BigInt @id @default(autoincrement())
   url String
 
@@ -125,6 +136,7 @@ model Image {
 }
 
 model Closet {
+  @@map("closets")
   id BigInt @id @default(autoincrement())
   name String
   description String?
@@ -138,6 +150,7 @@ model Closet {
 }
 
 model ClosetItem {
+  @@map("closet_items")
   id BigInt @id @default(autoincrement())
 
   itemId BigInt
