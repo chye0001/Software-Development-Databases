@@ -71,3 +71,7 @@ WHERE NOT EXISTS (
 );
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create pg_cron extension and schedule the function to run daily at 2 am
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+SELECT cron.schedule('delete_empty_closets_job', '0 2 * * *', 'SELECT delete_empty_closets()');
