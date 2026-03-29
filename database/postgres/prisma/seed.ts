@@ -1,5 +1,6 @@
 import "dotenv/config"
 import { prisma } from "../prisma-client.js"
+import type { Review } from "@prisma/client"
 
 async function seed() {
     // 1. Create Countries
@@ -279,7 +280,8 @@ async function seed() {
     });
 
     // 13. Create Reviews
-    await prisma.review.create({
+    const reviews: Review[] = [];
+    const bobReview = await prisma.review.create({
         data: {
             score: 5,
             text: "Amazing shoes! Super comfortable and stylish.",
@@ -287,13 +289,23 @@ async function seed() {
         }
     });
 
-    await prisma.review.create({
+    const aliceReview = await prisma.review.create({
         data: {
             score: 4,
             text: "Great quality, a bit pricey but worth it.",
             writtenBy: alice.id
         }
     });
+    reviews.push(bobReview, aliceReview);
+
+    // 14. Create SharedClosets
+    const bobSharedWithAlice = await prisma.sharedCloset.create({
+        data: {
+            closetId: bobCloset.id,
+            userId: alice.id
+        }
+    });
+
 
     console.log({
         users: { bob, alice },
@@ -303,7 +315,9 @@ async function seed() {
         categories: { shoes, clothing, accessories },
         items: { airJordan, ultraBoost, hoodie, watch },
         closets: { bobCloset, aliceCloset },
-        outfits: { casualOutfit, premiumOutfit }
+        outfits: { casualOutfit, premiumOutfit },
+        reviews: { reviews },
+        sharedClosets: { bobSharedWithAlice }
     });
     console.log("✅ Database seeded successfully!");
 }

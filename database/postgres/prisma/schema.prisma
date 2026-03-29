@@ -24,6 +24,7 @@ model User {
   review Review[]
   outfit Outfit[]
   closet Closet[]
+  sharedCloset SharedCloset[]
 }
 
 model Role {
@@ -147,6 +148,20 @@ model Closet {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   closetItem ClosetItem[]
+  sharedCloset SharedCloset[]
+}
+
+model SharedCloset {
+  @@map("shared_closets")
+  id BigInt @id @default(autoincrement())
+
+  closetId BigInt
+  closet Closet @relation(fields: [closetId], references: [id], onDelete: Cascade)
+
+  userId String @db.Uuid
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([closetId, userId]) // prevents duplicates
 }
 
 model ClosetItem {
