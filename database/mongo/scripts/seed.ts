@@ -1,21 +1,21 @@
 import "dotenv/config";
 import { randomUUID } from "crypto";
 import { connectMongo, closeMongo } from "../mongoose-client.js";
+import type { HydratedDocument } from "mongoose";
 
-import { Country, Role, Category, Brand, User, Item, Closet, Outfit } from "../models/index.js";
+import { Country, User, Brand, Category, Item, Closet, Outfit } from "../models/index.js";
+import type { ICountry, IItem, IBrand, IUser } from "../models/index.js";
 
 // ---------------------------------------------------------------------------
 // helpers
 // ---------------------------------------------------------------------------
 
-/** Drop all documents from every collection so we start clean. */
 async function clearAll() {
   await Promise.all([
     Country.deleteMany({}),
-    Role.deleteMany({}),
+    User.deleteMany({}),
     Category.deleteMany({}),
     Brand.deleteMany({}),
-    User.deleteMany({}),
     Item.deleteMany({}),
     Closet.deleteMany({}),
     Outfit.deleteMany({}),
@@ -34,18 +34,10 @@ async function seed() {
   const [denmark, usa] = await Country.insertMany([
     { id: randomUUID(), name: "Denmark",       countryCode: "DK" },
     { id: randomUUID(), name: "United States", countryCode: "US" },
-  ]);
+  ]) as HydratedDocument<ICountry>[];
   console.log("[seed] countries ✓");
 
-  // ── 2. roles ──────────────────────────────────────────────────────────────
-  const [adminRole, userRole, modRole] = await Role.insertMany([
-    { id: randomUUID(), role: "admin" },
-    { id: randomUUID(), role: "user" },
-    { id: randomUUID(), role: "moderator" },
-  ]);
-  console.log("[seed] roles ✓");
-
-  // ── 3. categories ─────────────────────────────────────────────────────────
+  // ── 2. categories ─────────────────────────────────────────────────────────
   const [tops, bottoms, outerwear, footwear] = await Category.insertMany([
     { id: randomUUID(), name: "Tops" },
     { id: randomUUID(), name: "Bottoms" },
@@ -54,21 +46,22 @@ async function seed() {
   ]);
   console.log("[seed] categories ✓");
 
-  // ── 4. brands ─────────────────────────────────────────────────────────────
+  // ── 3. brands ─────────────────────────────────────────────────────────────
   const [norseProjects, apc] = await Brand.insertMany([
     { id: randomUUID(), name: "Norse Projects", countryId: denmark!._id },
     { id: randomUUID(), name: "A.P.C.",          countryId: denmark!._id },
-  ]);
+  ]) as HydratedDocument<IBrand>[];
   console.log("[seed] brands ✓");
 
-  // ── 5. users ──────────────────────────────────────────────────────────────
+  // ── 4. users ──────────────────────────────────────────────────────────────
+  // role is now embedded directly — no separate roles collection needed
   const [alice, bob, carol, dave] = await User.insertMany([
     {
       id: randomUUID(),
       email: "alice@example.com",
       firstName: "Alice",
       lastName: "Smith",
-      roleId: adminRole!._id,
+      role: { name: "admin" },
       countryId: denmark!._id,
     },
     {
@@ -76,7 +69,7 @@ async function seed() {
       email: "bob@example.com",
       firstName: "Bob",
       lastName: "Johnson",
-      roleId: userRole!._id,
+      role: { name: "user" },
       countryId: usa!._id,
     },
     {
@@ -84,7 +77,7 @@ async function seed() {
       email: "carol@example.com",
       firstName: "Carol",
       lastName: "Williams",
-      roleId: userRole!._id,
+      role: { name: "user" },
       countryId: usa!._id,
     },
     {
@@ -92,20 +85,21 @@ async function seed() {
       email: "dave@example.com",
       firstName: "Dave",
       lastName: "Brown",
-      roleId: modRole!._id,
+      role: { name: "moderator" },
       countryId: denmark!._id,
     },
-  ]);
+  ]) as HydratedDocument<IUser>[];
   console.log("[seed] users ✓");
 
-  // ── 6. items ──────────────────────────────────────────────────────────────
+  // ── 5. items ──────────────────────────────────────────────────────────────
+  // category is now embedded directly — no separate categories collection needed
   const [woolJacket, straightJeans, whiteShirt, leatherBoots] =
     await Item.insertMany([
       {
         id: randomUUID(),
         name: "Wool Jacket",
         price: 1299.0,
-        categoryId: outerwear!._id,
+        category: { name: "Outerwear" },
         brandIds: [norseProjects!._id],
         images: [{ id: randomUUID(), url: "https://cdn.example.com/wool-jacket.jpg" }],
       },
@@ -113,7 +107,7 @@ async function seed() {
         id: randomUUID(),
         name: "Straight Jeans",
         price: 899.0,
-        categoryId: bottoms!._id,
+        category: { name: "Bottoms" },
         brandIds: [apc!._id],
         images: [{ id: randomUUID(), url: "https://cdn.example.com/straight-jeans.jpg" }],
       },
@@ -121,23 +115,23 @@ async function seed() {
         id: randomUUID(),
         name: "White Oxford Shirt",
         price: 599.0,
-        categoryId: tops!._id,
-        brandIds: [norseProjects!._id, apc!._id], // collab item
+        category: { name: "Tops" },
+        brandIds: [norseProjects!._id, apc!._id],
         images: [{ id: randomUUID(), url: "https://cdn.example.com/white-shirt.jpg" }],
       },
       {
         id: randomUUID(),
         name: "Leather Chelsea Boots",
         price: 1599.0,
-        categoryId: footwear!._id,
+        category: { name: "Footwear" },
         brandIds: [norseProjects!._id],
         images: [{ id: randomUUID(), url: "https://cdn.example.com/chelsea-boots.jpg" }],
       },
-    ]);
+    ]) as HydratedDocument<IItem>[];
   console.log("[seed] items ✓");
 
-  // ── 7. closets ────────────────────────────────────────────────────────────
-  const [aliceCloset, bobCloset] = await Closet.insertMany([
+  // ── 6. closets ────────────────────────────────────────────────────────────
+  await Closet.insertMany([
     {
       id: randomUUID(),
       name: "Alice's Wardrobe",
@@ -159,7 +153,7 @@ async function seed() {
   ]);
   console.log("[seed] closets ✓");
 
-  // ── 8. outfits ────────────────────────────────────────────────────────────
+  // ── 7. outfits ────────────────────────────────────────────────────────────
   await Outfit.insertMany([
     {
       id: randomUUID(),

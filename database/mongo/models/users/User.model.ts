@@ -1,12 +1,28 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+export interface IRole {
+  name: string;
+}
+
+const RoleSchema = new Schema<IRole>(
+  {
+    name: { type: String, required: true, trim: true, lowercase: true },
+  },
+  {
+    _id: false, // embedded sub-document, no own ObjectId needed
+  }
+);
+
+
+
+
 export interface IUser extends Document {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   createdAt: Date;
-  roleId: mongoose.Types.ObjectId;
+  role: IRole;
   countryId: mongoose.Types.ObjectId;
 }
 
@@ -16,7 +32,7 @@ const UserSchema = new Schema<IUser>(
     email:     { type: String, required: true, unique: true, lowercase: true, trim: true },
     firstName: { type: String, required: true, trim: true },
     lastName:  { type: String, required: true, trim: true },
-    roleId:    { type: Schema.Types.ObjectId, ref: "Role",    required: true },
+    role:      { type: RoleSchema, required: true },
     countryId: { type: Schema.Types.ObjectId, ref: "Country", required: true },
   },
   {
