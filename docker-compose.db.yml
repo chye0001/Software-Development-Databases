@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: Dockerfilepostgress
     ports:
-      - ${POSTGRES_PORT}:5432
+      - ${POSTGRES_PORT_DEV}:5432
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER_DEV}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_DEV}
+      POSTGRES_DB: ${POSTGRES_DB_DEV}
     volumes:
       - database_volume:/var/lib/postgresql/data
     networks:
@@ -20,18 +20,37 @@ services:
     ports:
       - "27018:27017"
     environment:
-      MONGO_INITDB_DATABASE: ${MONGO_DB}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_DEV}
     volumes:
       - mongo_data:/data/db
     networks:
       - database_network
 
+  neo4j:
+    image: neo4j:5
+    container_name: neo4j
+    ports:
+      - "7474:7474"   # Neo4j Browser (GUI)
+      - "7687:7687"   # Bolt protocol (driver connects here)
+    volumes:
+      - neo4j_data:/data
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER}/${NEO4J_PASSWORD}
+      NEO4J_PLUGINS: '["apoc"]'      # APOC utility library, very commonly used
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "password", "RETURN 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - database_network
   
 
 volumes:
   database_volume:
-    name: ${DB_VOLUME}
+    name: ${DB_VOLUME_DEV}
   mongo_data:
+  neo4j_data:
 
 networks:
   database_network:

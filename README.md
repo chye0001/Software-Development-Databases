@@ -9,20 +9,30 @@ Set up .env file based on .env.example, or with your own credentials. Should loo
 
 Postgres credentials:
 ```
-POSTGRES_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
+POSTGRES_DATABASE_URL_DEV=postgresql://postgres:postgres@localhost:5432/postgres
 
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=postgres
-DB_VOLUME=database_volume
+POSTGRES_PORT_DEV=5432
+POSTGRES_USER_DEV=postgres
+POSTGRES_PASSWORD_DEV=postgres
+POSTGRES_DB_DEV=postgres
+DB_VOLUME_DEV=database_volume
 ```
 
 MongoDB credentials:
 ```
-MONGO_DB_URI=mongodb://localhost:27018/mongo?directConnection=true 
-MONGO_DB=mongo
+MONGO_DB_URI_DEV=mongodb://localhost:27018/mongo?directConnection=true 
+MONGO_DB_DEV=mongo
 ```
+
+Neo4j credentials:
+```
+NEO4J_URL_DEV="neo4j://localhost:7687"
+
+NEO4J_USERNAME_DEV="neo4j"
+NEO4J_PASSWORD_DEV="password"
+NEO4J_DB_DEV="neo4j" 
+```
+
 
 To start up the local databases, run the following command:
 ```bash

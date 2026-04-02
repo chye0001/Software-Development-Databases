@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { randomUUID } from "crypto";
-import { connectMongo, closeMongo } from "../mongoose-client.js";
+import { connectMongo, disconnectMongo } from "../mongoose-client.js";
 import type { HydratedDocument } from "mongoose";
 
 import { Country, Category, User, Brand, Item, Closet, Outfit } from "../models/index.js";
@@ -196,7 +196,7 @@ async function seed() {
 
   // ── done ──────────────────────────────────────────────────────────────────
   console.log("\n[seed] All collections seeded successfully ✓");
-  await closeMongo();
+  await disconnectMongo();
 }
 
 seed().catch((err) => {

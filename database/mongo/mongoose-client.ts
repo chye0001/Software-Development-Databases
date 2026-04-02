@@ -1,11 +1,16 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 
-const URI = process.env.MONGO_DB_URI!;
-const DB_NAME = process.env.MONGO_DB!;
+const env = process.env.NODE_ENV ?? "dev";
+if (!["dev", "test", "prod"].includes(env)) {
+  throw new Error(`Invalid NODE_ENV value: ${env}. Expected "dev", "test", or "prod".`);
+}
 
-if (!URI) throw new Error("MONGO_DB_URI is not defined");
-if (!DB_NAME) throw new Error("MONGO_DB is not defined");
+const URI = process.env[`MONGO_DB_URI_${env.toUpperCase()}`];
+const DB_NAME = process.env[`MONGO_DB_${env.toUpperCase()}`];
+
+if (!URI) throw new Error(`MONGO_DB_URI_${env.toUpperCase()} is not defined`);
+if (!DB_NAME) throw new Error(`MONGO_DB_${env.toUpperCase()} is not defined`);
 
 export async function connectMongo(): Promise<void> {
   if (mongoose.connection.readyState === 1) {
@@ -13,11 +18,21 @@ export async function connectMongo(): Promise<void> {
     return;
   }
 
-  await mongoose.connect(URI, { dbName: DB_NAME });
-  console.log(`[mongoose] Connected to ${DB_NAME}`);
+  try {
+    await mongoose.connect(URI as string, { dbName: DB_NAME as string });
+    console.log(`[mongoose] Connected to ${DB_NAME}`);
+
+  } catch (error) {
+    console.error("[mongoose] Connection error:", error);
+  }
 }
 
-export async function closeMongo(): Promise<void> {
-  await mongoose.disconnect();
-  console.log("[mongoose] Disconnected");
+export async function disconnectMongo(): Promise<void> {
+  try {
+    await mongoose.disconnect();
+    console.log("[mongoose] Disconnected");
+    
+  } catch (error) {
+    console.error("[mongoose] Disconnection error:", error);
+  }
 }

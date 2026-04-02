@@ -3,10 +3,15 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
-const databaseUrl = process.env.POSTGRES_DATABASE_URL;
+const nodeEnv = process.env.NODE_ENV || "dev";
+if (!["dev", "test", "prod"].includes(nodeEnv)) {
+  throw new Error(`Invalid NODE_ENV value: ${nodeEnv}. Expected one of: dev, test, prod`);
+}
+
+const databaseUrl = process.env[`POSTGRES_DATABASE_URL_${nodeEnv}`];
 
 if (!databaseUrl) {
-  throw new Error("POSTGRES_DATABASE_URL environment variable is required. Set it in your .env file located at /database/postgres/.env");
+  throw new Error(`POSTGRES_DATABASE_URL_${nodeEnv} environment variable is required. Set it in your .env file located at /database/postgres/.env`);
 }
 
 export default defineConfig({
