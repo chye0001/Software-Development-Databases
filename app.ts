@@ -1,10 +1,19 @@
 import express from "express";
+
 import { prisma } from "./database/postgres/prisma-client.js";
+
+import { connectMongo, disconnectMongo } from "./database/mongo/mongoose-client.js";
+import { connectNeo4j, disconnectNeo4j } from "./database/neo4j/neogma-client.js";
+
+
 
 const app = express();
 const port = 3001;
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
+  // prisma client doesn't require explicit connect/disconnect, but we do need to manage connections for MongoDB and Neo4j
+  connectMongo();
+  connectNeo4j();
 });
 
 app.get("/healthcheck", (req, res) => {
@@ -14,4 +23,10 @@ app.get("/healthcheck", (req, res) => {
 app.get("/users", async (req, res) => {
   const users = await prisma.user.findMany();
   res.status(200).json(users);
+});
+
+process.on("SIGINT", async () => {
+  await disconnectMongo();
+  await disconnectNeo4j();
+  process.exit(0);
 });
