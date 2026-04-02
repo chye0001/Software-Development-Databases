@@ -1,10 +1,17 @@
+# Multi-Model Database
+This is a school project exploring 3 different databases:
+- Relational
+- Document
+- Graph
+
+
 # Initialize project
 First install all dependencies:
 ```bash
 npm i
 ```
 
-# Starting up local databases (Postgres & MongoDB) via Docker
+# Starting up local databases (Postgres & MongoDB & Neo4j) via Docker
 Set up .env file based on .env.example, or with your own credentials. Should look something like this:
 
 Postgres credentials:
@@ -40,6 +47,16 @@ docker compose -f docker-compose.db.yml up -d
 ```
 
 To understand how to work with the local databases using Prisma & Mongoose see the [README.md](./database/README.md) located in the /database folder. 
+
+
+
+# Controlling which database are in use
+To enable or disable the differnet databases just configure the [.env](.env) for the following 3 enviornemt values:
+
+POSTGRES_ENABLED_DEV=true | false
+MONGO_ENABLED_DEV=true | false
+NEO4J_ENABLED_DEV=true | false
+
 
 
 # Starting up backend
