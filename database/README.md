@@ -18,7 +18,7 @@ docker compose -f docker-compose.db.yml up -d
 ```
 
 
-# Working with Prisma
+# Working with Prisma - Postgres ORM
 
 ## Initial Prisma setup after clonning repository
 After pulling the code base, you need to sync your local database. You do this by calling the following command:
@@ -77,7 +77,7 @@ The credentials can be found in the [.env](../.env) file located at the root of 
 
 
 
-# Working with Mongoose
+# Working with Mongoose - MongoDB ODM
 Mongoose unlike Prisma does not have build in commands that can be run against the database instance like...
 "seeding", "reseting", "migrating" etc...
 
@@ -99,3 +99,11 @@ npm run mongo:reset
 This will basically drop the entire Mongo database. This is expected behavior, since Mongo does not
 show any collections are databases, if there are no Collections with any Documents inside.
 In other words if there are no data stored in the database, Mongo will not show the database.
+
+
+
+
+
+
+# Working with Neogma - Neo4j OGM
+...
