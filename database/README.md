@@ -113,4 +113,10 @@ In other words if there are no data stored in the database, Mongo will not show 
 
 
 # Working with Neogma - Neo4j OGM
-...
+IMPORTANT
+When running the script it will always wipe the entire database before seeding.
+
+To seed the Neo4j graph database use execute this command - script found [here](./neo4j/scripts/seed.ts):
+```bash
+npm run neo4j:seed
+```
