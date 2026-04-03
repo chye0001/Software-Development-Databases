@@ -35,7 +35,6 @@ services:
       - "7687:7687"   # Bolt protocol (driver connects here)
     volumes:
       - neo4j_data:/data
-      - ./database/neo4j/constraints-and-indexes.cypher:/init/constraints-and-indexes.cypher:ro
     environment:
       NEO4J_AUTH: ${NEO4J_USERNAME_DEV}/${NEO4J_PASSWORD_DEV}
     healthcheck:
