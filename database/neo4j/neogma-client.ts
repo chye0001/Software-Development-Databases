@@ -56,18 +56,24 @@ export const neogma = new Neogma(
 
 let isConnected = false;
 export async function connectNeo4j(): Promise<void> {
-  if (isConnected) {
-    console.warn("Neo4j is already connected. Skipping redundant connectNeo4j() call.");
-    return;
-  }
+  const MAX_RETRIES = 10;
+  const DELAY_MS = 60000; // 1 minute
 
-  try {
-    await neogma.verifyConnectivity();
-    isConnected = true;
-    console.log("Neo4j connected via Neogma for environment:", ENV);
-    
-  } catch (error) {
-    console.error("Failed to connect to Neo4j:", error);
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      await neogma.verifyConnectivity();
+      isConnected = true;
+      console.log(`Neo4j connected on attempt ${attempt}`);
+
+    } catch (error) {
+      console.warn(`Neo4j connection attempt ${attempt}/${MAX_RETRIES} failed. Retrying in ${DELAY_MS}ms...`);
+
+      if (attempt === MAX_RETRIES) {
+        throw new Error(`Neo4j failed to connect after ${MAX_RETRIES} attempts`);
+      }
+
+      await new Promise((res) => setTimeout(res, DELAY_MS));
+    }
   }
 }
 

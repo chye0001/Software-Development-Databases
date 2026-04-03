@@ -18,12 +18,22 @@ export async function connectMongo(): Promise<void> {
     return;
   }
 
-  try {
-    await mongoose.connect(URI as string, { dbName: DB_NAME as string });
-    console.log(`[mongoose] Connected to ${DB_NAME}`);
+  const MAX_RETRIES = 10;
+  const DELAY_MS = 60000; // 1 minute
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      await mongoose.connect(URI as string, { dbName: DB_NAME as string });
+      console.log(`[mongoose] Connected to ${DB_NAME} on attempt ${attempt}`);
 
-  } catch (error) {
-    console.error("[mongoose] Connection error:", error);
+    } catch (error) {
+      console.warn(`[mongoose] Connection attempt ${attempt}/${MAX_RETRIES} failed. Retrying in ${DELAY_MS}ms...`);
+      
+      if (attempt === MAX_RETRIES) {
+        throw new Error(`[mongoose] Failed to connect after ${MAX_RETRIES} attempts: ${error}`);
+      }
+
+      await new Promise((res) => setTimeout(res, DELAY_MS));
+    }
   }
 }
 
